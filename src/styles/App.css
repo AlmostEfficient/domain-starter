@@ -106,26 +106,40 @@ header{
 
 .mint-button {
   background: -webkit-linear-gradient(left, #a200d6, #ff6fdf);
-  /* Alternative colours from Figma */
-  /* background: -webkit-linear-gradient(left, #5FC55D, #41DAEC); */
   font-size: 18px;
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
   margin: 20px 10px;
   border-radius: 20px;
   padding: 0px 2rem;
-  /* width: fit-content !important; */
 }
 
-.opensea-button {
-  background-color: rgb(32, 129, 226);
+.mint-button:disabled{
+  background: #550072;
+  color: rgb(209, 209, 209);
+  cursor: not-allowed;
 }
 
-.mint-count {
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
+.mint-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
+
+.edit-button{
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 3px;
+  top: 20px;
+  border: 0px;
+  font-size: 12px;
+  background-color: white;
+}
+
+.edit-icon{
+  width: 12px;
+}
+
 
 .footer-container {
   display: flex;
@@ -174,12 +188,23 @@ input:focus {
   outline: none;
 }
 
+.first-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left:62px;
+}
+
 .tld {
   font-size: 20px;
   font-weight: bold;
   color: white;
   margin: 0;  
   padding: 0;
+  margin-left: 10px;
+  margin-bottom: 13px;
 }
 
 .mint-list {
@@ -204,6 +229,11 @@ input:focus {
   color: black;
   min-width: 150px;
   max-width: fit-content;
+}
+
+.link{
+  color: black;
+  text-decoration: none;
 }
 
 .underlined{
