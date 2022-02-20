@@ -19,6 +19,7 @@ const App = () => {
   	const [domain, setDomain] = useState('');
   	const [record, setRecord] = useState('');
   	const [network, setNetwork] = useState('');
+	const [editing, setEditing] = useState(false);
 
   	const connectWallet = async () => {
     	try {
@@ -151,7 +152,7 @@ const App = () => {
 			console.log(error);
 	  }
 	}
-	
+
 	const updateDomain = async () => {
 		if (!record || !domain) { return }
 		setLoading(true);
@@ -189,40 +190,49 @@ const App = () => {
 	);
 	
 	// Form to enter domain name and data
-	const renderInputForm = () => {
+	const renderInputForm = () =>{
 		if (network !== 'Polygon Mumbai Testnet') {
 			return (
 				<div className="connect-wallet-container">
-					<p>Please connect to the Polygon Mumbai Testnet</p>
+					<p>Please connect to Polygon Mumbai Testnet</p>
 				</div>
 			);
 		}
+
 		return (
 			<div className="form-container">
 				<div className="first-row">
 					<input
 						type="text"
 						value={domain}
-						placeholder="domain"
+						placeholder='domain'
 						onChange={e => setDomain(e.target.value)}
 					/>
 					<p className='tld'> {tld} </p>
 				</div>
-	
+
 				<input
 					type="text"
 					value={record}
 					placeholder='whats ur ninja power?'
 					onChange={e => setRecord(e.target.value)}
 				/>
-	
-				<div className="button-container">
-					{/* Call the mintDomain function when the button is clicked*/}
-					<button className='cta-button mint-button' onClick={mintDomain}>
-						Mint
-					</button> 
-				</div>
-	
+					{/* If the editing variable is true, return the "Set record" and "Cancel" button */}
+					{editing ? (
+						<div className="button-container">
+							<button className='cta-button mint-button' disabled={loading} onClick={updateDomain}>
+								Set record
+							</button>  
+							<button className='cta-button mint-button' onClick={() => {setEditing(false)}}>
+								Cancel
+							</button>  
+						</div>
+					) : (
+						// If editing is not true, the mint button will be returned instead
+						<button className='cta-button mint-button' disabled={loading} onClick={mintDomain}>
+							Mint
+						</button>  
+					)}
 			</div>
 		);
 	}
