@@ -20,6 +20,7 @@ const App = () => {
   	const [record, setRecord] = useState('');
   	const [network, setNetwork] = useState('');
 	const [editing, setEditing] = useState(false);
+	const [mints, setMints] = useState([]);
 
   	const connectWallet = async () => {
     	try {
@@ -38,6 +39,7 @@ const App = () => {
       		console.log(error)
     	}
   	}
+	
 	const switchNetwork = async () => {
 		if (window.ethereum) {
 			try {
@@ -76,8 +78,6 @@ const App = () => {
 			alert('MetaMask is not installed. Please install it to use this app: https://metamask.io/download.html');
 		} 
 	}
-
-
 
 	const checkIfWalletIsConnected = async () => {
 		const { ethereum } = window;
@@ -177,6 +177,45 @@ const App = () => {
 		  }
 		setLoading(false);
 	}
+
+	const fetchMints = async () => {
+		try {
+			const { ethereum } = window;
+			if (ethereum) {
+				// You know all this
+				const provider = new ethers.providers.Web3Provider(ethereum);
+				const signer = provider.getSigner();
+				const contract = new ethers.Contract(CONTRACT_ADDRESS, contractAbi.abi, signer);
+					
+				// Get all the domain names from our contract
+				const names = await contract.getAllNames();
+					
+				// For each name, get the record and the address
+				const mintRecords = await Promise.all(names.map(async (name) => {
+				const mintRecord = await contract.records(name);
+				const owner = await contract.domains(name);
+				return {
+					id: names.indexOf(name),
+					name: name,
+					record: mintRecord,
+					owner: owner,
+				};
+			}));
+	
+			console.log("MINTS FETCHED ", mintRecords);
+			setMints(mintRecords);
+			}
+		} catch(error){
+			console.log(error);
+		}
+	}
+	
+	// This will run any time currentAccount or network are changed
+	useEffect(() => {
+		if (network === 'Polygon Mumbai Testnet') {
+			fetchMints();
+		}
+	}, [currentAccount, network]);
 
 	// Render methods
 	const renderNotConnectedContainer = () => (
