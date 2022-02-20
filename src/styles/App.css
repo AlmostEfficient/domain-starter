@@ -30,9 +30,27 @@ header{
 
 .title {
   margin: 0;
-  font-size: 35px;
-  font-weight: bold;
+  font-size: xxx-large;
+  font-weight: 900;
   color: white;
+}
+
+.title-animation {
+  animation: flow 30s ease-in-out infinite;
+  background: linear-gradient(
+    -60deg,
+    #904e95,
+    #0cd7e4,
+    #01FF89,
+    #904e95
+  );
+  background-size: 300%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+    background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+
 }
 
 .subtitle {
@@ -92,19 +110,25 @@ header{
 .connect-wallet-button {
   background-image: linear-gradient(
     to right,
-    #ff8177 0%,
-    #ff867a 0%,
-    #ff8c7f 21%,
-    #f99185 52%,
-    #cf556c 78%,
-    #b12a5b 100%
+    #88eef5 0%,
+    #0cd7e4 0%,
+    #cb5eee 21%,
+    #01FF89 52%,
+    #85c7aa 78%,
+    #7A5FFF 90%
   );
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
 }
 
 .mint-button {
-  background: -webkit-linear-gradient(left, #a200d6, #ff6fdf);
+  background: -webkit-linear-gradient(
+    left,
+    #88eef5 0%,
+    #0cd7e4 0%,
+    #01FF89 10%,
+    #7A5FFF 90%
+  );
   font-size: 18px;
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
@@ -144,12 +168,13 @@ header{
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 30px;
+  padding-bottom: 10px;
 }
 
-.twitter-logo {
+.logo {
   width: 35px;
   height: 35px;
+  padding-left: 5px;
 }
 
 .footer-text {
@@ -164,6 +189,14 @@ header{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.buildspace {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 5px;
+  background-color: #181818;
 }
 
 input{
@@ -228,6 +261,7 @@ input:focus {
   border-radius: 5px;
   margin: 10px 15px;
   font-size: 18px;
+  font-weight: bold;
   background-color: #c4b7fa;
   color: black;
   min-width: 150px;
@@ -262,6 +296,18 @@ input:focus {
 }
 
 /* KeyFrames */
+@keyframes flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+  
+}
 @-webkit-keyframes gradient-animation {
   0% {
     background-position: 0% 50%;

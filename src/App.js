@@ -6,10 +6,17 @@ import contractAbi from './utils/contractABI.json';
 import { ethers } from "ethers";
 import './styles/App.css';
 import twitterLogo from './assets/twitter-logo.svg';
+import githubLogo from './assets/github-logo.png';
 
 // Constants
-const TWITTER_HANDLE = '_buildspace';
+const TWITTER_HANDLE = 'JheaveJ';
+const TWITTER_CREATOR_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+
+const GITHUB_HANDLE = 'jheavejimenez';
+const GITHUB_LINK = `https://github.com/${GITHUB_HANDLE}`;
+const OPENSEA_LOGO = 'https://storage.googleapis.com/opensea-static/Logomark/Logomark-White.svg'
+const OPENSEA_LINK ='https://testnets.opensea.io/collection/kewl-domains-v2';
 
 const tld = '.kewl';
 const CONTRACT_ADDRESS = '0xa67039d3A87B9F0F9E23ca527b084E47796485ea';
@@ -279,7 +286,9 @@ const App = () => {
 		if (network !== 'Polygon Mumbai Testnet') {
 			return (
 				<div className="connect-wallet-container">
-					<p>Please connect to Polygon Mumbai Testnet</p>
+					<h2>Please switch to Polygon Mumbai Testnet</h2>
+					{/* This button will call our switch network function */}
+					<button className='cta-button mint-button' onClick={switchNetwork}>Click here to switch</button>
 				</div>
 			);
 		}
@@ -332,7 +341,7 @@ const App = () => {
 				<div className="header-container">
 					<header>
 						<div className="left">
-							<p className="title">(❛̃ ͜ʖ❛̃) Kewl Domain Name Service</p>
+							<h1 className="title title-animation">(❛̃ ͜ʖ❛̃) Kewl Domains</h1>
 							<p className="subtitle">Your immortal Kewl Domain  on the blockchain!</p>
 						</div>
 						{/* Display a logo and wallet connection status*/}
@@ -348,14 +357,37 @@ const App = () => {
 				{mints && renderMints()}
 				
 				<div className="footer-container">
-					<img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
+					<img alt="Github Logo" className="logo" src={githubLogo} />
+					<a
+						className="footer-text"
+						href={GITHUB_LINK}
+						target="_blank"
+						rel="noreferrer"
+					>{`${GITHUB_HANDLE}`}</a>
+					<img alt="Twitter Logo" className="logo" src={twitterLogo} />
 					<a
 						className="footer-text"
 						href={TWITTER_LINK}
 						target="_blank"
 						rel="noreferrer"
 					>{`built with @${TWITTER_HANDLE}`}</a>
+					<img alt="opensea Logo" className="logo" src={OPENSEA_LOGO} />
+					<a
+						className="footer-text"
+						href={OPENSEA_LINK}
+						target="_blank"
+						rel="noreferrer"
+					>Opensea Collection</a>
 				</div>
+			</div>
+			<div className="buildspace">
+				<img alt="Twitter Logo" className="logo" src={twitterLogo} />
+				<a
+					className="footer-text"
+					href={TWITTER_LINK}
+					target="_blank"
+					rel="noreferrer"
+				>{`built with @${TWITTER_CREATOR_HANDLE}`}</a>
 			</div>
 		</div>
 	);
