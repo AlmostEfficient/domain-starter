@@ -11,8 +11,8 @@ import twitterLogo from './assets/twitter-logo.svg';
 const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
-const tld = '.jhv';
-const CONTRACT_ADDRESS = '0xf162187feD7b0758240DDD5C51630E369CC3bbb7';
+const tld = '.kewl';
+const CONTRACT_ADDRESS = '0xa67039d3A87B9F0F9E23ca527b084E47796485ea';
 
 const App = () => {
   	const [currentAccount, setCurrentAccount] = useState('');
@@ -266,7 +266,7 @@ const App = () => {
 	// Render methods
 	const renderNotConnectedContainer = () => (
 		<div className="connect-wallet-container">
-			<img src="https://media.giphy.com/media/3ohhwytHcusSCXXOUg/giphy.gif" alt="Ninja donut gif" />
+			<img src="https://media.giphy.com/media/UWnkS16fiDQNb25mHL/giphy.gif" alt="im kewl gif" />
       {/* Call the connectWallet function we just wrote when the button is clicked */}
 			<button onClick={connectWallet} className="cta-button connect-wallet-button">
 				Connect Wallet
@@ -290,7 +290,7 @@ const App = () => {
 					<input
 						type="text"
 						value={domain}
-						placeholder='domain'
+						placeholder='whats ur kewl domain?'
 						onChange={e => setDomain(e.target.value)}
 					/>
 					<p className='tld'> {tld} </p>
@@ -299,7 +299,7 @@ const App = () => {
 				<input
 					type="text"
 					value={record}
-					placeholder='whats ur ninja power?'
+					placeholder='whats ur kewl super power?'
 					onChange={e => setRecord(e.target.value)}
 				/>
 					{/* If the editing variable is true, return the "Set record" and "Cancel" button */}
@@ -332,8 +332,8 @@ const App = () => {
 				<div className="header-container">
 					<header>
 						<div className="left">
-							<p className="title">🐱‍👤 Kewl Domain Name Service</p>
-							<p className="subtitle">Your immortal API on the blockchain!</p>
+							<p className="title">(❛̃ ͜ʖ❛̃) Kewl Domain Name Service</p>
+							<p className="subtitle">Your immortal Kewl Domain  on the blockchain!</p>
 						</div>
 						{/* Display a logo and wallet connection status*/}
 						<div className="right">
