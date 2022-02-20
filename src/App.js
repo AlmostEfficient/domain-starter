@@ -2,7 +2,7 @@ import polygonLogo from './assets/polygonlogo.png';
 import ethLogo from './assets/ethlogo.png';
 import { networks } from './utils/networks';
 import React, { useEffect, useState } from "react";
-import contractABI from './utils/contractABI.json';
+import contractAbi from './utils/contractABI.json';
 import { ethers } from "ethers";
 import './styles/App.css';
 import twitterLogo from './assets/twitter-logo.svg';
@@ -21,6 +21,7 @@ const App = () => {
   	const [network, setNetwork] = useState('');
 	const [editing, setEditing] = useState(false);
 	const [mints, setMints] = useState([]);
+	const [loading, setLoading] = useState(false);
 
   	const connectWallet = async () => {
     	try {
@@ -124,7 +125,7 @@ const App = () => {
 		console.log("Minting domain", domain, "with price", price);
 		try {
 			const { ethereum } = window;
-			(ethereum) {
+			if (ethereum) {
 				const provider = new ethers.providers.Web3Provider(ethereum);
 				const signer = provider.getSigner();
 				const contract = new ethers.Contract(CONTRACT_ADDRESS, contractAbi.abi, signer);
@@ -216,6 +217,43 @@ const App = () => {
 			console.log(error);
 		}
 	}
+
+	const renderMints = () => {
+		if (currentAccount && mints.length > 0) {
+			return (
+				<div className="mint-container">
+					<p className="subtitle"> Recently minted domains!</p>
+					<div className="mint-list">
+						{ mints.map((mint, index) => {
+							return (
+								<div className="mint-item" key={index}>
+									<div className='mint-row'>
+										<a className="link" href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`} target="_blank" rel="noopener noreferrer">
+											<p className="underlined">{' '}{mint.name}{tld}{' '}</p>
+										</a>
+										{/* If mint.owner is currentAccount, add an "edit" button*/}
+										{ mint.owner.toLowerCase() === currentAccount.toLowerCase() ?
+											<button className="edit-button" onClick={() => editRecord(mint.name)}>
+												<img className="edit-icon" src="https://img.icons8.com/metro/26/000000/pencil.png" alt="Edit button" />
+											</button>
+											:
+											null
+										}
+									</div>
+						<p> {mint.record} </p>
+					</div>)
+					})}
+				</div>
+			</div>);
+		}
+	};
+	
+	// This will take us into edit mode and show us the edit buttons!
+	const editRecord = (name) => {
+		console.log("Editing record for", name);
+		setEditing(true);
+		setDomain(name);
+	}
 	
 	// This will run any time currentAccount or network are changed
 	useEffect(() => {
@@ -223,6 +261,7 @@ const App = () => {
 			fetchMints();
 		}
 	}, [currentAccount, network]);
+
 
 	// Render methods
 	const renderNotConnectedContainer = () => (
@@ -304,9 +343,9 @@ const App = () => {
 					</header>
 				</div>
 				
-				{!currentAccount && renderNotConnectedContainer()}{!currentAccount && renderNotConnectedContainer()}{!currentAccount && renderNotConnectedContainer()}
-				{/* Render the input form if an account is connected */}
+				{!currentAccount && renderNotConnectedContainer()}
 				{currentAccount && renderInputForm()}
+				{mints && renderMints()}
 				
 				<div className="footer-container">
 					<img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
