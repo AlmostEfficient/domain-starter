@@ -12,7 +12,7 @@ const TWITTER_HANDLE = '_buildspace';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const tld = '.jhv';
-const CONTRACT_ADDRESS = '0xf154bC56f5399675F5164FFE14Dc410E47104bDd';
+const CONTRACT_ADDRESS = '0xf162187feD7b0758240DDD5C51630E369CC3bbb7';
 
 const App = () => {
   	const [currentAccount, setCurrentAccount] = useState('');
