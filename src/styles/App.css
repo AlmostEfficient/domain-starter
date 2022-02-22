@@ -1,6 +1,6 @@
 .App {
   height: 100vh;
-  background-color: #0d1116;
+  background-color: #0e0d0d86;
   text-align: center;
   color: white;
 }
@@ -11,10 +11,20 @@ p {
 
 .container {
   height: 100%;
-  background-color: #181818;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background-image: linear-gradient(
+    to right,
+    #b4b3b3 0%,
+    #000000 0%,
+    #b4b3b3 21%,
+    #db11115d 52%,
+    #b4b3b3 78%,
+    #0eec20 100%
+  );
+  background-size: 200% 200%;
+  animation: gradient-animation 14s ease infinite;
 }
 
 .header-container {
@@ -32,12 +42,16 @@ header{
   margin: 0;
   font-size: 35px;
   font-weight: bold;
-  color: white;
+  font-style: normal;
+  font-variant-caps: small-caps;
+  color: rgb(228, 59, 17);
 }
 
 .subtitle {
   font-size: 25px;
-  color: white;
+  font-style: italic;
+  font-family: cursive;
+  color: rgb(6, 43, 209);
 }
 
 .left{
@@ -53,7 +67,7 @@ header{
 
 .right{
   display: flex;
-  background: black;
+  background: rgb(31, 30, 30);
   border-radius: 16px;
   padding: 12px 20px;
   height: 99%;
@@ -92,12 +106,12 @@ header{
 .connect-wallet-button {
   background-image: linear-gradient(
     to right,
-    #ff8177 0%,
-    #ff867a 0%,
-    #ff8c7f 21%,
-    #f99185 52%,
-    #cf556c 78%,
-    #b12a5b 100%
+    #77a7ff 0%,
+    #738dfd 0%,
+    #716ff7 21%,
+    #7a99ff 52%,
+    #5860ce 78%,
+    #2a2997 100%
   );
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
