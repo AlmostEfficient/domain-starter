@@ -357,8 +357,8 @@ const App = () => {
 				<div className="header-container">
 					<header>
             <div className="left">
-              <p className="title">🏃🏿‍♂️Kenyan Name Service🏃🏿‍♀️</p>
-              <p className="subtitle">🏁--->karibu kwenye blockchain!--->🕸</p>
+              <p className="title">Kenyan Name Service</p>
+              <p className="subtitle">karibu kwenye blockchain!</p>
             </div>
 			{/* Display a logo and wallet conection status */}
 			<div className={"right"}>
