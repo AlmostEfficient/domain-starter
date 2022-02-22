@@ -1,4 +1,4 @@
-# buildspace DNS starter project
+# Kenyan Name Service (Polygon PoS Chain DNS)
 
 ### **Welcome 👋**
 
