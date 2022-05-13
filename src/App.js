@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
+import contractAbi from "./utils/contractABI.json";
 
 // Constants
 const TWITTER_HANDLE = "_buildspace";
@@ -55,6 +56,56 @@ const App = () => {
     }
   };
 
+  const mintDomain = async () => {
+    if (!domain) {
+      return;
+    }
+    if (domain.length < 3) {
+      alert("Domain must be at least 3 characters long");
+      return;
+    }
+    const price =
+      domain.length === 3 ? "0.05" : domain.length === 4 ? "0.03" : "0.01";
+    console.log("Minting domain", domain, "with price", price);
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          contractAbi.abi,
+          signer
+        );
+
+        console.log("Going to pop wallet now to pay gas...");
+        let tx = await contract.register(domain, {
+          value: ethers.utils.parseEther(price),
+        });
+        const receipt = await tx.wait();
+
+        if (receipt.status === 1) {
+          console.log(
+            "Domain minted! https://mumbai.polygonscan.com/tx/" + tx.hash
+          );
+
+          tx = await contract.setRecord(domain, record);
+          await tx.wait();
+
+          console.log(
+            "Record set! https://mumbai.polygonscan.com/tx/" + tx.hash
+          );
+          setRecord("");
+          setDomain("");
+        } else {
+          alert("Transaction failed! Please try again.");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const renderNotConnectedContainer = () => (
     <div className="connect-wallet-container">
       <img
@@ -92,7 +143,7 @@ const App = () => {
           <button
             className="cta-button mint-button"
             disabled={null}
-            onClick={null}
+            onClick={mintDomain}
           >
             Mint
           </button>
