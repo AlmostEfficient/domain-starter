@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
 import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
 
 // Constants
 const TWITTER_HANDLE = "_buildspace";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+const tld = ".chrundle";
+const CONTRACT_ADDRESS = "0x31Df15756365D1B9C41d153c5904fF29Ae01c95F";
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
+  const [domain, setDomain] = useState("");
+  const [record, setRecord] = useState("");
 
   const connectWallet = async () => {
     try {
@@ -65,6 +70,44 @@ const App = () => {
     </div>
   );
 
+  const renderInputForm = () => {
+    return (
+      <div className="form-container">
+        <div className="first-row">
+          <input
+            type="text"
+            value={domain}
+            placeholder="domain"
+            onChange={(e) => setDomain(e.target.value)}
+          />
+          <p className="tld">{tld}</p>
+        </div>
+        <input
+          type="text"
+          value={record}
+          placeholder="record"
+          onChange={(e) => setRecord(e.target.value)}
+        />
+        <div className="button-container">
+          <button
+            className="cta-button mint-button"
+            disabled={null}
+            onClick={null}
+          >
+            Mint
+          </button>
+          <button
+            className="cta-button mint-button"
+            disabled={null}
+            onClick={null}
+          >
+            Set data
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
@@ -82,6 +125,7 @@ const App = () => {
         </div>
 
         {!currentAccount && renderNotConnectedContainer()}
+        {currentAccount && renderInputForm()}
 
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
