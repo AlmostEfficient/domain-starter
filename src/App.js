@@ -3,6 +3,9 @@ import { ethers } from "ethers";
 import "./styles/App.css";
 import twitterLogo from "./assets/twitter-logo.svg";
 import contractAbi from "./utils/contractABI.json";
+import polygonLogo from "./assets/polygonlogo.png";
+import ethLogo from "./assets/ethlogo.png";
+import { networks } from "./utils/networks";
 
 // Constants
 const TWITTER_HANDLE = "_buildspace";
@@ -14,6 +17,7 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [domain, setDomain] = useState("");
   const [record, setRecord] = useState("");
+  const [network, setNetwork] = useState("");
 
   const connectWallet = async () => {
     try {
@@ -53,6 +57,15 @@ const App = () => {
       setCurrentAccount(account);
     } else {
       console.log("No authorized account found.");
+    }
+
+    const chainId = await ethereum.request({ method: "eth_chainId" });
+    setNetwork(networks[chainId]);
+
+    ethereum.on("chainChanged", handleChainChanged);
+
+    function handleChainChanged(_chainId) {
+      window.location.reload();
     }
   };
 
@@ -122,6 +135,13 @@ const App = () => {
   );
 
   const renderInputForm = () => {
+    if (network !== "Polygon Mumbai Testnet") {
+      return (
+        <div className="connect-wallet-container">
+          <p>Please connect to the Polygon Mumbai Testnet</p>
+        </div>
+      );
+    }
     return (
       <div className="form-container">
         <div className="first-row">
@@ -171,6 +191,22 @@ const App = () => {
             <div className="left">
               <p className="title">🐱‍👤 Chrundle Name Service</p>
               <p className="subtitle">Your immortal API on the blockchain!</p>
+            </div>
+            <div className="right">
+              <img
+                alt="Network logo"
+                className="logo"
+                src={network.includes("Polygon") ? polygonLogo : ethLogo}
+              />
+              {currentAccount ? (
+                <p>
+                  {" "}
+                  Wallet: {currentAccount.slice(0, 6)}...
+                  {currentAccount.slice(-4)}{" "}
+                </p>
+              ) : (
+                <p> Not connected </p>
+              )}
             </div>
           </header>
         </div>
