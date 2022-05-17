@@ -69,6 +69,45 @@ const App = () => {
     }
   };
 
+  const switchNetwork = async () => {
+    if (window.ethereum) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x13881" }],
+        });
+      } catch (error) {
+        if (error.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: "0x13881",
+                  chainName: "Polygon Mumbai Testnet",
+                  rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+                  nativeCurrency: {
+                    name: "Mumbai Matic",
+                    symbol: "MATIC",
+                    decimals: 18,
+                  },
+                  blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+                },
+              ],
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }
+        console.error(error);
+      }
+    } else {
+      alert(
+        "MetaMask is not installed. Please install it to use this app: https://metamask.io/download.html"
+      );
+    }
+  };
+
   const mintDomain = async () => {
     if (!domain) {
       return;
@@ -138,7 +177,10 @@ const App = () => {
     if (network !== "Polygon Mumbai Testnet") {
       return (
         <div className="connect-wallet-container">
-          <p>Please connect to the Polygon Mumbai Testnet</p>
+          <p>Please switch to the Polygon Mumbai Testnet</p>
+          <button className="cta-button mint-button" onClick={switchNetwork}>
+            Click here to switch
+          </button>
         </div>
       );
     }
