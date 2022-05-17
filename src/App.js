@@ -18,6 +18,9 @@ const App = () => {
   const [domain, setDomain] = useState("");
   const [record, setRecord] = useState("");
   const [network, setNetwork] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [mints, setMints] = useState([]);
 
   const connectWallet = async () => {
     try {
@@ -158,6 +161,72 @@ const App = () => {
     }
   };
 
+  const fetchMints = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          contractAbi.abi,
+          signer
+        );
+
+        const names = await contract.getAllNames();
+
+        const mintRecords = await Promise.all(
+          names.map(async (name) => {
+            const mintRecord = await contract.records(name);
+            const owner = await contract.domains(name);
+            return {
+              id: names.indexOf(name),
+              name: name,
+              record: mintRecord,
+              owner: owner,
+            };
+          })
+        );
+
+        console.log("Mints Fetched ", mintRecords);
+        setMints(mintRecords);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateDomain = async () => {
+    if (!record || !domain) {
+      return;
+    }
+    setLoading(true);
+    console.log("Updating domain", domain, "with record", record);
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          contractAbi.abi,
+          signer
+        );
+
+        let tx = await contract.setRecord(domain, record);
+        await tx.wait();
+        console.log("Record set https://mumbai.polygonscan.com/tx/" + tx.hash);
+
+        fetchMints();
+        setRecord("");
+        setDomain("");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
+
   const renderNotConnectedContainer = () => (
     <div className="connect-wallet-container">
       <img
@@ -201,22 +270,33 @@ const App = () => {
           placeholder="record"
           onChange={(e) => setRecord(e.target.value)}
         />
-        <div className="button-container">
+        {editing ? (
+          <div className="button-container">
+            <button
+              className="cta-button mint-button"
+              disabled={loading}
+              onClick={updateDomain}
+            >
+              Set record
+            </button>
+            <button
+              className="cta-button mint-button"
+              onClick={() => {
+                setEditing(false);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
           <button
             className="cta-button mint-button"
-            disabled={null}
+            disabled={loading}
             onClick={mintDomain}
           >
             Mint
           </button>
-          <button
-            className="cta-button mint-button"
-            disabled={null}
-            onClick={null}
-          >
-            Set data
-          </button>
-        </div>
+        )}
       </div>
     );
   };
@@ -224,6 +304,12 @@ const App = () => {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
+
+  useEffect(() => {
+    if (network === "Polygon Mumbai Testnet") {
+      fetchMints();
+    }
+  }, [currentAccount, network]);
 
   return (
     <div className="App">
