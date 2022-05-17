@@ -11,7 +11,7 @@ import { networks } from "./utils/networks";
 const TWITTER_HANDLE = "_buildspace";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const tld = ".chrundle";
-const CONTRACT_ADDRESS = "0x31Df15756365D1B9C41d153c5904fF29Ae01c95F";
+const CONTRACT_ADDRESS = "0xA88501886c883b995b53E509a0186C726A692703";
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
@@ -150,6 +150,11 @@ const App = () => {
           console.log(
             "Record set! https://mumbai.polygonscan.com/tx/" + tx.hash
           );
+
+          setTimeout(() => {
+            fetchMints();
+          }, 2000);
+
           setRecord("");
           setDomain("");
         } else {
@@ -253,6 +258,7 @@ const App = () => {
         </div>
       );
     }
+
     return (
       <div className="form-container">
         <div className="first-row">
@@ -283,6 +289,8 @@ const App = () => {
               className="cta-button mint-button"
               onClick={() => {
                 setEditing(false);
+                setDomain("");
+                setRecord("");
               }}
             >
               Cancel
@@ -299,6 +307,59 @@ const App = () => {
         )}
       </div>
     );
+  };
+
+  const renderMints = () => {
+    if (currentAccount && mints.length > 0) {
+      return (
+        <div className="mint-container">
+          <p className="subtitle">Recently minted domains!</p>
+          <div className="mint-list">
+            {mints.map((mint, index) => {
+              return (
+                <div className="mint-item" key={index}>
+                  <div className="mint-row">
+                    <a
+                      className="link"
+                      href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <p className="underlined">
+                        {" "}
+                        {mint.name}
+                        {tld}{" "}
+                      </p>
+                    </a>
+                    {mint.owner.toLowerCase() ===
+                    currentAccount.toLowerCase() ? (
+                      <button
+                        className="edit-button"
+                        onClick={() => editRecord(mint.name, mint.record)}
+                      >
+                        <img
+                          className="edit-icon"
+                          src="https://img.icons8.com/metro/26/000000/pencil.png"
+                          alt="Edit button"
+                        />
+                      </button>
+                    ) : null}
+                  </div>
+                  <p>{mint.record}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+  };
+
+  const editRecord = (name, record) => {
+    console.log("Editing record for", name);
+    setEditing(true);
+    setDomain(name);
+    setRecord(record);
   };
 
   useEffect(() => {
@@ -341,6 +402,7 @@ const App = () => {
 
         {!currentAccount && renderNotConnectedContainer()}
         {currentAccount && renderInputForm()}
+        {mints && renderMints()}
 
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
