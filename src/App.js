@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import "./styles/App.css";
-import twitterLogo from "./assets/twitter-logo.svg";
 import contractAbi from "./utils/contractABI.json";
 import polygonLogo from "./assets/polygonlogo.png";
 import ethLogo from "./assets/ethlogo.png";
 import { networks } from "./utils/networks";
 
+import MetaMaskButton from "./components/MetaMaskButton";
+
 // Constants
 const TWITTER_HANDLE = "_buildspace";
-const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const tld = ".chrundle";
 const CONTRACT_ADDRESS = "0xA88501886c883b995b53E509a0186C726A692703";
 
@@ -234,16 +233,7 @@ const App = () => {
 
   const renderNotConnectedContainer = () => (
     <div className="connect-wallet-container">
-      <img
-        src="https://media.giphy.com/media/3ohhwytHcusSCXXOUg/giphy.gif"
-        alt="Ninja gif"
-      />
-      <button
-        onClick={connectWallet}
-        className="cta-button connect-wallet-button"
-      >
-        Connect Wallet
-      </button>
+      <MetaMaskButton connectWallet={connectWallet} />
     </div>
   );
 
@@ -373,47 +363,35 @@ const App = () => {
   }, [currentAccount, network]);
 
   return (
-    <div className="App">
-      <div className="container">
-        <div className="header-container">
-          <header>
-            <div className="left">
-              <p className="title">🐱‍👤 Chrundle Name Service</p>
-              <p className="subtitle">Your immortal API on the blockchain!</p>
-            </div>
-            <div className="right">
-              <img
-                alt="Network logo"
-                className="logo"
-                src={network.includes("Polygon") ? polygonLogo : ethLogo}
-              />
-              {currentAccount ? (
-                <p>
-                  {" "}
-                  Wallet: {currentAccount.slice(0, 6)}...
-                  {currentAccount.slice(-4)}{" "}
-                </p>
-              ) : (
-                <p> Not connected </p>
-              )}
-            </div>
-          </header>
+    <div className="w-full flex flex-col items-center border border-black">
+      <header className="mt-10 w-11/12">
+        <div className="border border-black flex flex-row justify-between ">
+          <div>
+            <p className="title">Chrundle Name Service</p>
+            <p className="subtitle">DNS on the Polygon Network</p>
+          </div>
+          <div className="flex items-center   bg-slate-400 rounded-lg shadow-2xl p-4">
+            <img
+              alt="Network logo"
+              className="w-6 flex items-center mr-2"
+              src={network.includes("Polygon") ? polygonLogo : ethLogo}
+            />
+            {currentAccount ? (
+              <p>
+                {" "}
+                Wallet: {currentAccount.slice(0, 6)}...
+                {currentAccount.slice(-4)}{" "}
+              </p>
+            ) : (
+              <p> Not connected </p>
+            )}
+          </div>
         </div>
+      </header>
 
-        {!currentAccount && renderNotConnectedContainer()}
-        {currentAccount && renderInputForm()}
-        {mints && renderMints()}
-
-        <div className="footer-container">
-          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
-          <a
-            className="footer-text"
-            href={TWITTER_LINK}
-            target="_blank"
-            rel="noreferrer"
-          >{`built with @${TWITTER_HANDLE}`}</a>
-        </div>
-      </div>
+      {!currentAccount && renderNotConnectedContainer()}
+      {currentAccount && renderInputForm()}
+      {mints && renderMints()}
     </div>
   );
 };
