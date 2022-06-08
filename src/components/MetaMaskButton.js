@@ -5,10 +5,10 @@ const MetaMaskButton = ({ connectWallet }) => {
     <button
       onClick={connectWallet}
       type="button"
-      class="bg-gray-800 border-gray-700 text-white hover:bg-gray-700 active:bg-gray-500 border rounded-lg font-semibold text-lg px-5 py-2.5 text-center inline-flex items-center "
+      className="bg-gray-800 border-gray-700 text-white hover:bg-gray-700 active:bg-gray-500 border rounded-lg font-semibold text-lg px-5 py-2.5 text-center inline-flex items-center "
     >
       <svg
-        class="w-6 h-5 mr-2 -ml-1"
+        className="w-6 h-5 mr-2 -ml-1"
         viewBox="0 0 2405 2501"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

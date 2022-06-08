@@ -279,14 +279,14 @@ const App = () => {
         {editing ? (
           <div className="flex justify-evenly">
             <button
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-large px-5 py-2.5 text-center mt-8"
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-xl px-5 py-2.5 text-center mt-8"
               disabled={loading}
               onClick={updateDomain}
             >
               Set record
             </button>
             <button
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-large px-5 py-2.5 text-center mt-8"
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-xl px-5 py-2.5 text-center mt-8"
               onClick={() => {
                 setEditing(false);
                 setDomain("");
@@ -299,7 +299,7 @@ const App = () => {
         ) : (
           <div className="mx-auto">
             <button
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-large px-5 py-2.5 text-center mt-8"
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-xl px-5 py-2.5 text-center mt-8"
               disabled={loading}
               onClick={mintDomain}
             >
@@ -315,24 +315,35 @@ const App = () => {
     if (currentAccount && mints.length > 0) {
       return (
         <div className="border border-white w-3/4 flex flex-col items-center">
-          <h2 className="text-white text-2xl font-semibold underline mb-4">
+          <h2 className="text-white text-2xl font-semibold underline mb-2">
             Minted domains
           </h2>
-          <div className="flex justify-center">
+          <div className="flex justify-center flex-wrap">
             {mints.map((mint, index) => {
+              let bgColor;
+              if ((index + 4) % 4 === 0) {
+                bgColor = "bg-gradient-to-br from-purple-600 to-blue-500";
+              } else if ((index + 4) % 4 === 1) {
+                bgColor = "bg-gradient-to-r from-cyan-500 to-blue-500";
+              } else if ((index + 4) % 4 === 2) {
+                bgColor = "bg-gradient-to-r from-purple-500 to-pink-500";
+              } else if ((index + 4) % 4 === 3) {
+                bgColor = "bg-gradient-to-br from-pink-500 to-orange-400";
+              }
               return (
-                <div className="mint-item" key={index}>
-                  <div className="mint-row">
+                <div
+                  className={`${bgColor} m-4 p-4 rounded-xl text-white`}
+                  key={index}
+                >
+                  <div className="flex">
                     <a
-                      className="link"
                       href={`https://testnets.opensea.io/assets/mumbai/${CONTRACT_ADDRESS}/${mint.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <p className="underlined">
-                        {" "}
+                      <p className="font-semibold text-lg underline">
                         {mint.name}
-                        {tld}{" "}
+                        {tld}
                       </p>
                     </a>
                     {mint.owner.toLowerCase() ===
@@ -341,15 +352,25 @@ const App = () => {
                         className="edit-button"
                         onClick={() => editRecord(mint.name, mint.record)}
                       >
-                        <img
-                          className="edit-icon"
-                          src="https://img.icons8.com/metro/26/000000/pencil.png"
+                        <svg
+                          className="w-6 h-6 ml-1 text-gray-300"
                           alt="Edit button"
-                        />
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          />
+                        </svg>
                       </button>
                     ) : null}
                   </div>
-                  <p>{mint.record}</p>
+                  <p className="font-medium text-md italic">{mint.record}</p>
                 </div>
               );
             })}
