@@ -7,8 +7,6 @@ import { networks } from "./utils/networks";
 
 import MetaMaskButton from "./components/MetaMaskButton";
 
-// Constants
-const TWITTER_HANDLE = "_buildspace";
 const tld = ".chrundle";
 const CONTRACT_ADDRESS = "0xA88501886c883b995b53E509a0186C726A692703";
 
@@ -232,7 +230,7 @@ const App = () => {
   };
 
   const renderNotConnectedContainer = () => (
-    <div className="connect-wallet-container">
+    <div className="mt-28">
       <MetaMaskButton connectWallet={connectWallet} />
     </div>
   );
@@ -240,43 +238,55 @@ const App = () => {
   const renderInputForm = () => {
     if (network !== "Polygon Mumbai Testnet") {
       return (
-        <div className="connect-wallet-container">
-          <p>Please switch to the Polygon Mumbai Testnet</p>
-          <button className="cta-button mint-button" onClick={switchNetwork}>
-            Click here to switch
-          </button>
+        <div className="mt-24">
+          <p className="text-white font-medium text-xl">
+            Please switch to the Polygon Mumbai Testnet
+          </p>
+          <div className="flex justify-center">
+            <button
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-large px-5 py-2.5 text-center mt-4"
+              onClick={switchNetwork}
+            >
+              Click here to switch
+            </button>
+          </div>
         </div>
       );
     }
 
     return (
-      <div className="form-container">
-        <div className="first-row">
+      <div className="w-1/3 my-32 flex flex-col justify-center">
+        <div className="w-full flex items-center relative mb-4">
+          <label className="sr-only">Domain</label>
           <input
             type="text"
+            className="w-full p-2 text-lg text-center font-medium border-none bg-gray-900 text-white rounded-lg focus:ring-0 focus:ring-offset-0"
             value={domain}
             placeholder="domain"
             onChange={(e) => setDomain(e.target.value)}
           />
-          <p className="tld">{tld}</p>
+          <span className="absolute right-5 font-medium text-gray-500">
+            {tld}
+          </span>
         </div>
         <input
           type="text"
+          className="w-full p-2 text-lg text-center font-medium border-none bg-gray-900 text-white rounded-lg focus:ring-0 focus:ring-offset-0"
           value={record}
           placeholder="record"
           onChange={(e) => setRecord(e.target.value)}
         />
         {editing ? (
-          <div className="button-container">
+          <div className="flex justify-evenly">
             <button
-              className="cta-button mint-button"
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-large px-5 py-2.5 text-center mt-8"
               disabled={loading}
               onClick={updateDomain}
             >
               Set record
             </button>
             <button
-              className="cta-button mint-button"
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-large px-5 py-2.5 text-center mt-8"
               onClick={() => {
                 setEditing(false);
                 setDomain("");
@@ -287,13 +297,15 @@ const App = () => {
             </button>
           </div>
         ) : (
-          <button
-            className="cta-button mint-button"
-            disabled={loading}
-            onClick={mintDomain}
-          >
-            Mint
-          </button>
+          <div className="mx-auto">
+            <button
+              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl w-56 font-medium rounded-lg text-large px-5 py-2.5 text-center mt-8"
+              disabled={loading}
+              onClick={mintDomain}
+            >
+              Mint
+            </button>
+          </div>
         )}
       </div>
     );
@@ -302,9 +314,11 @@ const App = () => {
   const renderMints = () => {
     if (currentAccount && mints.length > 0) {
       return (
-        <div className="mint-container">
-          <p className="subtitle">Recently minted domains!</p>
-          <div className="mint-list">
+        <div className="border border-white w-3/4 flex flex-col items-center">
+          <h2 className="text-white text-2xl font-semibold underline mb-4">
+            Minted domains
+          </h2>
+          <div className="flex justify-center">
             {mints.map((mint, index) => {
               return (
                 <div className="mint-item" key={index}>
@@ -346,7 +360,6 @@ const App = () => {
   };
 
   const editRecord = (name, record) => {
-    console.log("Editing record for", name);
     setEditing(true);
     setDomain(name);
     setRecord(record);
@@ -363,14 +376,17 @@ const App = () => {
   }, [currentAccount, network]);
 
   return (
-    <div className="w-full flex flex-col items-center border border-black">
+    <div className="w-full flex flex-col items-center">
       <header className="mt-10 w-11/12">
-        <div className="border border-black flex flex-row justify-between ">
+        <div className="flex flex-row justify-between ">
           <div>
-            <p className="title">Chrundle Name Service</p>
-            <p className="subtitle">DNS on the Polygon Network</p>
+            <h1 className="text-white font-bold text-3xl">
+              Chrundle Name Service
+              <br />
+              DNS on the Polygon Network
+            </h1>
           </div>
-          <div className="flex items-center   bg-slate-400 rounded-lg shadow-2xl p-4">
+          <div className="flex items-center bg-gray-800 text-white font-medium rounded-lg shadow-xl p-4">
             <img
               alt="Network logo"
               className="w-6 flex items-center mr-2"
