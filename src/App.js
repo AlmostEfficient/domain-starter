@@ -6,6 +6,8 @@ import ethLogo from "./assets/ethlogo.png";
 import { networks } from "./utils/networks";
 
 import MetaMaskButton from "./components/MetaMaskButton";
+import GradientButton from "./components/GradientButton";
+import EditButton from "./components/EditButton";
 import Spinner from "./components/Spinner";
 
 const tld = ".dum";
@@ -152,10 +154,7 @@ const App = () => {
             );
           }
 
-          setTimeout(() => {
-            fetchMints();
-          }, 2000);
-
+          fetchMints();
           setRecord("");
           setDomain("");
         } else {
@@ -203,7 +202,7 @@ const App = () => {
     }
   };
 
-  const updateDomain = async () => {
+  const updateRecord = async () => {
     setLoading(true);
     console.log("Updating domain", domain, "with record", record);
     try {
@@ -224,6 +223,7 @@ const App = () => {
         fetchMints();
         setRecord("");
         setDomain("");
+        setEditing(false);
       }
     } catch (error) {
       console.error(error);
@@ -231,26 +231,47 @@ const App = () => {
     setLoading(false);
   };
 
+  const editRecord = (name, record) => {
+    setEditing(true);
+    setDomain(name);
+    setRecord(record);
+  };
+
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
+
+  useEffect(() => {
+    if (network === "Polygon Mumbai Testnet") {
+      fetchMints();
+    }
+  }, [currentAccount, network]);
+
   const renderNotConnectedContainer = () => (
     <div className="mt-28">
-      <MetaMaskButton connectWallet={connectWallet} />
+      <h2 className="text-white text-center text-[26px] font-semibold tracking-wider">
+        Welcome to the Dum Name Service!
+        <br />
+        Please connect your wallet.
+      </h2>
+      <div className="flex justify-center">
+        <MetaMaskButton connectWallet={connectWallet} />
+      </div>
     </div>
   );
 
   const renderInputForm = () => {
     if (network !== "Polygon Mumbai Testnet") {
       return (
-        <div className="mt-24">
-          <p className="text-white font-medium text-xl">
+        <div className="mt-28">
+          <h2 className="text-white text-[26px] font-semibold tracking-wider">
             Please switch to the Polygon Mumbai Testnet
-          </p>
+          </h2>
           <div className="flex justify-center">
-            <button
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-large px-5 py-2.5 text-center mt-4"
-              onClick={switchNetwork}
-            >
-              Click here to switch
-            </button>
+            <GradientButton
+              handleClick={switchNetwork}
+              label="Click Here to Switch"
+            />
           </div>
         </div>
       );
@@ -282,34 +303,28 @@ const App = () => {
         />
         {editing ? (
           <div className="flex justify-evenly">
-            <button
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 disabled:text-gray-400 disabled:from-green-600 disabled:to-blue-800 hover:bg-gradient-to-bl disabled:hover:bg-gradient-to-br disabled:cursor-not-allowed w-56 font-medium rounded-lg text-xl px-5 py-2.5 text-center mt-8"
-              disabled={loading}
-              onClick={updateDomain}
-            >
-              Update record
-            </button>
-            <button
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 disabled:text-gray-400 disabled:from-green-600 disabled:to-blue-800 hover:bg-gradient-to-bl disabled:hover:bg-gradient-to-br disabled:cursor-not-allowed w-56 font-medium rounded-lg text-xl px-5 py-2.5 text-center mt-8"
-              disabled={loading}
-              onClick={() => {
+            <GradientButton
+              loading={loading}
+              handleClick={updateRecord}
+              label={loading ? "Updating..." : "Update Record"}
+            />
+            <GradientButton
+              loading={loading}
+              handleClick={() => {
                 setEditing(false);
                 setDomain("");
                 setRecord("");
               }}
-            >
-              Cancel
-            </button>
+              label="Cancel"
+            />
           </div>
         ) : (
           <div className="mx-auto">
-            <button
-              className="text-white bg-gradient-to-br from-green-400 to-blue-600 disabled:text-gray-400 disabled:from-green-600 disabled:to-blue-800 hover:bg-gradient-to-bl disabled:hover:bg-gradient-to-br disabled:cursor-not-allowed w-56 font-medium rounded-lg text-xl px-5 py-2.5 text-center mt-8"
-              disabled={loading}
-              onClick={mintDomain}
-            >
-              {loading ? "Minting..." : "Mint"}
-            </button>
+            <GradientButton
+              loading={loading}
+              handleClick={mintDomain}
+              label={loading ? "Minting..." : "Mint"}
+            />
           </div>
         )}
         <div className="flex justify-center">{loading && <Spinner />}</div>
@@ -355,26 +370,9 @@ const App = () => {
                       </a>
                       {mint.owner.toLowerCase() ===
                       currentAccount.toLowerCase() ? (
-                        <button
-                          className="edit-button"
-                          onClick={() => editRecord(mint.name, mint.record)}
-                        >
-                          <svg
-                            className="w-6 h-6 ml-1 text-gray-300"
-                            alt="Edit button"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                          </svg>
-                        </button>
+                        <EditButton
+                          handleClick={() => editRecord(mint.name, mint.record)}
+                        />
                       ) : null}
                     </div>
                     <p className="font-medium text-md italic">
@@ -389,22 +387,6 @@ const App = () => {
       );
     }
   };
-
-  const editRecord = (name, record) => {
-    setEditing(true);
-    setDomain(name);
-    setRecord(record);
-  };
-
-  useEffect(() => {
-    checkIfWalletIsConnected();
-  }, []);
-
-  useEffect(() => {
-    if (network === "Polygon Mumbai Testnet") {
-      fetchMints();
-    }
-  }, [currentAccount, network]);
 
   return (
     <div className="w-full flex flex-col items-center">
